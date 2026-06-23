@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Access Denied – TalentBoard</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-card">
+        <h1 class="login-title">403</h1>
+        <p class="login-subtitle" th:text="${errorTitle} ?: 'Access Denied'"></p>
+        <div class="alert alert-error">
+            <span th:text="${errorMessage} ?: 'You do not have permission to access this resource.'"></span>
+        </div>
+        <p class="login-footer"><a th:href="@{/dashboard}">Back to Dashboard</a></p>
+    </div>
+</div>
+</body>
+</html>
