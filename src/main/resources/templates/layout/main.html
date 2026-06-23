@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <th:block th:replace="~{fragments/head :: headLinks}"></th:block>
+    <title>TalentBoard</title>
+</head>
+<body class="bg-light">
+
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container py-4">
+
+        <!-- Flash: success -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Flash: error -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Page content placeholder -->
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-semibold">
+                    <i class="bi bi-house-fill me-2" style="color:#6366f1;"></i>Welcome to TalentBoard
+                </h5>
+                <p class="card-text text-muted">This is the base layout wrapper used by all authenticated views.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
