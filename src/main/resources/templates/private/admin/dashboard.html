@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <th:block th:replace="~{fragments/head :: headLinks}"></th:block>
+    <title>Admin Dashboard – TalentBoard</title>
+</head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container py-4">
+
+    <!-- Page header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h4 class="fw-bold mb-0">
+                <i class="bi bi-shield-check me-2" style="color:#6366f1;"></i>Admin Dashboard
+            </h4>
+            <p class="text-muted small mb-0">Full system overview</p>
+        </div>
+    </div>
+
+    <!-- Flash messages -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-3 p-3" style="background:#ede9fe;">
+                        <i class="bi bi-people-fill fs-4" style="color:#6366f1;"></i>
+                    </div>
+                    <div>
+                        <div class="fs-4 fw-bold" th:text="${users.totalElements}">0</div>
+                        <div class="text-muted small">Total Users</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-3 p-3" style="background:#dcfce7;">
+                        <i class="bi bi-briefcase-fill fs-4 text-success"></i>
+                    </div>
+                    <div>
+                        <div class="fs-4 fw-bold" th:text="${vacancies.totalElements}">0</div>
+                        <div class="text-muted small">Total Vacancies</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Recent Users -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom-0 pt-3 pb-0">
+                    <h6 class="fw-semibold mb-0">
+                        <i class="bi bi-people me-2" style="color:#6366f1;"></i>Recent Users
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${users.isEmpty()}">
+                                <td colspan="4" class="text-center text-muted py-4">No users found.</td>
+                            </tr>
+                            <tr th:each="u : ${users}">
+                                <td class="ps-3 fw-medium" th:text="${u.name}"></td>
+                                <td class="text-muted small" th:text="${u.email}"></td>
+                                <td>
+                                    <span class="badge text-uppercase"
+                                          th:classappend="${u.role.name() == 'ADMIN' ? 'bg-danger' :
+                                                          u.role.name() == 'RECRUITER' ? 'bg-warning text-dark' : 'bg-primary'}"
+                                          th:text="${u.role}"></span>
+                                </td>
+                                <td class="text-muted small"
+                                    th:text="${#temporals.format(u.createdAt, 'dd MMM yyyy')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Vacancies -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-semibold mb-0">
+                        <i class="bi bi-briefcase me-2" style="color:#6366f1;"></i>Recent Vacancies
+                    </h6>
+                    <a th:href="@{/vacancies}" class="btn btn-sm" style="background:#6366f1;color:#fff;">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Recruiter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${vacancies.isEmpty()}">
+                                <td colspan="4" class="text-center text-muted py-4">No vacancies found.</td>
+                            </tr>
+                            <tr th:each="v : ${vacancies}">
+                                <td class="ps-3">
+                                    <a th:href="@{/vacancies/{id}(id=${v.idVacancy})}"
+                                       class="text-decoration-none fw-medium" th:text="${v.title}"></a>
+                                </td>
+                                <td class="text-muted small" th:text="${v.category}"></td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${v.status.name() == 'OPEN' ? 'bg-success' : 'bg-secondary'}"
+                                          th:text="${v.status}"></span>
+                                </td>
+                                <td class="text-muted small" th:text="${v.responsibleName}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
